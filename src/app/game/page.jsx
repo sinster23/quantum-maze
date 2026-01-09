@@ -222,6 +222,7 @@ export default function QuantumMaze() {
   const [lastDirection, setLastDirection] = useState(null);
   const [message, setMessage] = useState("DISCOVER THE RULES!");
   const [gameOver, setGameOver] = useState(false);
+  const [showVictoryModal, setShowVictoryModal] = useState(false);
   const [won, setWon] = useState(false);
   const router = useRouter();
 
@@ -325,11 +326,12 @@ export default function QuantumMaze() {
     }
     
     setGrid(newGrid);
-    
+
     if (nr === exit.r && nc === exit.c) {
       setWon(true);
       setGameOver(true);
       setMessage(`VICTORY IN ${newMoveCount} MOVES!`);
+      setShowVictoryModal(true);
     }
     
     const canMove = [[-1,0], [1,0], [0,-1], [0,1]].some(([dr, dc]) => {
@@ -569,6 +571,24 @@ export default function QuantumMaze() {
           </div>
         </div>
       </div>
+      {/* Victory Modal */}
+{showVictoryModal && (
+  <div className="fixed inset-0 bg-black/80 bg-opacity-90 flex items-center justify-center z-50">
+    <div className="border-4 border-cyan-400 bg-[#0a1628] p-8 max-w-md shadow-[0_0_50px_rgba(0,217,255,0.8)]">
+      <h2 className="text-cyan-400 text-2xl mb-4 text-center pixelated" style={{ textShadow: '0 0 20px rgba(0,217,255,1)' }}>
+        VICTORY! 
+      </h2>
+      <div className="text-cyan-300 text-xs pixelated mb-6 text-center space-y-3">
+        <p className="text-lg text-white">Congratulations!</p>
+        <p>You escaped the Quantum Maze!</p>
+        <div className="border-2 border-cyan-400 bg-cyan-900/30 p-4 mt-4">
+          <p className="text-white text-sm">TOTAL MOVES: {moveCount}</p>
+          <p className="text-white text-sm">FINAL ENTROPY: {entropy.toFixed(1)}%</p>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }
